@@ -4,7 +4,8 @@ pragma solidity ^0.8.10;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
-contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000_000 ether) {
+// TODO: TEST ONLY !!!
+contract BabyVMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624 ether) {
 
     uint256 public constant BATCH = 1_000 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
