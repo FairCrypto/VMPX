@@ -12,7 +12,7 @@ const print = process.env.EXTRA_PRINT
 contract("VMPX", async accounts => {
 
     const cycles = Number(process.env[`TEST_CYCLES`]) || 40;
-    let token;
+    let token, gas;
 
     before(async () => {
         try {
@@ -30,6 +30,16 @@ contract("VMPX", async accounts => {
     })
 
     it("Should return gas estimates for mint", async () => {
-        console.log(await token.mint.estimateGas());
+        gas = await token.mint.estimateGas();
+        assert.ok(gas);
+    })
+
+    it("Should allow to mint", async () => {
+        await assert.doesNotReject(() => {
+            return token.mint().then(res => {
+                console.log(res?.receipt?.gasUsed, gas);
+                return res
+            })
+        });
     })
 })
