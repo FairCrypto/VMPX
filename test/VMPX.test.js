@@ -32,13 +32,16 @@ contract("VMPX", async accounts => {
     })
 
     it("Should return gas estimates for mint", async () => {
-        gas = await token.mint.estimateGas();
+        gas = await token.mint.estimateGas(1);
+        console.log(gas)
         assert.ok(gas);
+        const maxGas = await token.mint.estimateGas(256);
+        console.log(maxGas)
     })
 
     it("Should allow to mint with gas difficulty", async () => {
         await assert.doesNotReject(() => {
-            return token.mint().then(res => {
+            return token.mint(1).then(res => {
                 assert.ok(res?.receipt?.gasUsed === gas);
                 return res
             })
