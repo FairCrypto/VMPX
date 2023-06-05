@@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
-contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
+contract VMPX is ERC20("RBIT", "RIBT"), ERC20Capped(108_624_000 ether) {
 
     uint256 public constant BATCH = 160 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
@@ -28,6 +28,7 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
     }
 
     function mint(uint256 power) external {
+        require(power > 0, 'power has to be positive');
         require(tx.origin == msg.sender, 'sorry folks, only EOAs');
         _doWork(power);
         _mint(msg.sender, BATCH * power);
