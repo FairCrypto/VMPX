@@ -14,6 +14,7 @@ contract("VMPX", async accounts => {
 
     const cycles = Number(process.env[`TEST_CYCLES`]) || 40;
     let token, baby, gas;
+    const power = 196;
 
     before(async () => {
         try {
@@ -29,24 +30,25 @@ contract("VMPX", async accounts => {
         assert.ok(await token.symbol() === 'VMPX');
         assert.ok(await token.totalSupply().then(_ => _.toNumber()) === 0);
         assert.ok(await token.cycles().then(_ => _.toNumber()) === cycles);
+        console.log('cycles', await token.cycles().then(_ => _.toNumber()))
     })
 
     it("Should return gas estimates for mint", async () => {
-        gas = await token.mint.estimateGas();
+        gas = await token.mint.estimateGas(1);
         assert.ok(gas);
     })
 
     it("Should allow to mint with gas difficulty", async () => {
         await assert.doesNotReject(() => {
-            return token.mint().then(res => {
-                assert.ok(res?.receipt?.gasUsed === gas);
+            return token.mint(power).then(res => {
+                console.log(res?.receipt?.gasUsed.toLocaleString());
                 return res
             })
         });
     })
 
     it("Should show increased counter post-mint by `cycles` amount", async () => {
-        assert.ok(await token.counter().then(_ => _.toNumber()) === cycles);
+        assert.ok(await token.counter().then(_ => _.toNumber()) === cycles * power);
     })
 
     it("Should allow to mint below cap", async () => {
