@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000_000 ether) {
 
-    uint256 public constant BATCH = 1_000 ether;
+    uint256 public constant BATCH = 200 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
 
     uint256 public counter;
@@ -17,8 +17,8 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000_000 ether) {
         cycles = cycles_;
     }
 
-    function _doWork() internal {
-        for(uint i = 0; i < cycles; i++) {
+    function _doWork(uint256 power) internal {
+        for(uint i = 0; i < cycles * power; i++) {
             _work[++counter] = true;
         }
     }
@@ -27,9 +27,10 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000_000 ether) {
         super._mint(account, amount);
     }
 
-    function mint() external {
-        require(tx.origin == msg.sender, 'sorry folks, only EOAs');
-        _doWork();
-        _mint(msg.sender, BATCH);
+    function mint(uint256 power) external {
+        require(power > 0, 'power has to be positive');
+        require(tx.origin == msg.sender, 'only EOAs allowed');
+        _doWork(power);
+        _mint(msg.sender, BATCH * power);
     }
 }
