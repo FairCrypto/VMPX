@@ -6,6 +6,8 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000_000 ether) {
 
+    string public constant AUTHORS = "@MrJackLevin @ackebom @lbelyaev faircrypto.org";
+
     uint256 public constant BATCH = 200 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
 
