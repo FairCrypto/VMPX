@@ -13,8 +13,8 @@ const print = process.env.EXTRA_PRINT
 contract("VMPX", async accounts => {
 
     const cycles = Number(process.env[`TEST_CYCLES`]) || 40;
-    let token, baby, gas;
-    const power = 196;
+    let token, baby, gas, batch;
+    const power = 195;
 
     before(async () => {
         try {
@@ -30,12 +30,16 @@ contract("VMPX", async accounts => {
         assert.ok(await token.symbol() === 'VMPX');
         assert.ok(await token.totalSupply().then(_ => _.toNumber()) === 0);
         assert.ok(await token.cycles().then(_ => _.toNumber()) === cycles);
-        console.log('cycles', await token.cycles().then(_ => _.toNumber()))
+        batch = await token.BATCH().then(_ => _.toString()).then(BigInt);
+        batch = Number(batch / BigInt(1000000000000000000));
+        console.log('cycles', await token.cycles().then(_ => _.toNumber()), 'batch', batch)
     })
 
     it("Should return gas estimates for mint", async () => {
-        gas = await token.mint.estimateGas(1);
-        assert.ok(gas);
+        for await (const p of [1, 10, 20, 50, 100, 150, 195]) {
+            gas = await token.mint.estimateGas(p);
+            console.log(gas, gas / (p * batch), 700 * batch * p + 90_000);
+        }
     })
 
     it("Should allow to mint with gas difficulty", async () => {

@@ -1,6 +1,6 @@
 {
   "name": "vmpx",
-  "private": true,
+  "private": false,
   "version": "0.1.0",
   "description": "VMPX ERC-20 Token. Fair Distribution",
   "main": "truffle-config.js",
@@ -30,7 +30,7 @@
     "prettier-plugin-solidity": "^1.0.0-beta.24",
     "solhint": "^3.3.7",
     "truffle-assertions": "^0.9.2",
-    "truffle-plugin-verify": "^0.5.28"
+    "truffle-plugin-verify": "^0.5.33"
   },
   "scripts": {
     "compile": "truffle compile -all",
