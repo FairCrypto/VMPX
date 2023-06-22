@@ -18,8 +18,8 @@ contract BabyVMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624 ether) {
         cycles = cycles_;
     }
 
-    function _doWork() internal {
-        for(uint i = 0; i < cycles; i++) {
+    function _doWork(uint256 power) internal {
+        for(uint i = 0; i < cycles * power; i++) {
             _work[++counter] = true;
         }
     }
@@ -28,9 +28,11 @@ contract BabyVMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624 ether) {
         super._mint(account, amount);
     }
 
-    function mint() external {
-        require(tx.origin == msg.sender, 'sorry folks, only EOAs');
-        _doWork();
-        _mint(msg.sender, BATCH);
+    function mint(uint256 power) external {
+        require(power > 0, 'power out of bounds');
+        require(tx.origin == msg.sender, 'only EOAs allowed');
+        require(totalSupply() + (BATCH * power) <= cap(), "minting would exceed cap");
+        _doWork(power);
+        _mint(msg.sender, BATCH * power);
     }
 }

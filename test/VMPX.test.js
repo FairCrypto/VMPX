@@ -57,7 +57,7 @@ contract("VMPX", async accounts => {
 
     it("Should allow to mint below cap", async () => {
         for (const i of Array(Math.floor(108_624 / 1_000)).fill(null)) {
-            await assert.doesNotReject(() => baby.mint());
+            await assert.doesNotReject(() => baby.mint(1));
             process.stdout.write('.');
         }
         process.stdout.write('\n');
@@ -65,6 +65,6 @@ contract("VMPX", async accounts => {
     })
 
     it("Should NOT allow to mint above cap", async () => {
-        await assert.rejects(() => baby.mint(), 'ERC20Capped: cap exceeded');
+        await assert.rejects(() => baby.mint(1), 'minting would exceed cap');
     })
 })
