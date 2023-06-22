@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
 
-    string public constant AUTHORS = "@MrJackLevin @ackebom @lbelyaev faircrypto.org";
+    string public constant AUTHORS = "@MrJackLevin @ackebom @lbelyaev @JammaBeans faircrypto.org";
 
     uint256 public constant BATCH = 200 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
@@ -32,6 +32,8 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
     function mint(uint256 power) external {
         require(power > 0 && power < 196, 'power out of bounds');
         require(tx.origin == msg.sender, 'only EOAs allowed');
+        require(totalSupply() + (BATCH * power) <= cap(), "minting would exceed cap");
+
         _doWork(power);
         _mint(msg.sender, BATCH * power);
     }
