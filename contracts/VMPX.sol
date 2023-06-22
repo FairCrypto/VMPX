@@ -32,6 +32,8 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
     function mint(uint256 power) external {
         require(power > 0 && power < 196, 'power out of bounds');
         require(tx.origin == msg.sender, 'only EOAs allowed');
+        require(totalSupply() + (BATCH * power) <= cap(), "minting would exceed cap");
+
         _doWork(power);
         _mint(msg.sender, BATCH * power);
     }
