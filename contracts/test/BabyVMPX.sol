@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 // TODO: TEST ONLY !!!
-contract BabyVMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624 ether) {
+contract BabyVMPX is ERC20("Baby VMPX", "VMPX"), ERC20Capped(108_624 ether) {
 
     uint256 public constant BATCH = 1_000 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
