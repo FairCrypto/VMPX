@@ -104,7 +104,12 @@ module.exports = {
       }),
       network_id: 202212,       // Custom network
       gas: 10_000_000,
-      gasPrice: 110_000_000_000
+      gasPrice: 110_000_000_000,
+      verify: {
+        apiUrl: 'https://explorer.x1-devnet.xen.network/api',
+        apiKey: 'MY_API_KEY',
+        explorerUrl: 'https://explorer.x1-devnet.xen.network/address',
+      }
       // gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
       // gasPrice: 20000000000,  // 20 gwei (in wei) (default: 100 gwei)
       // from: DEPLOYER_ADDRESS_X1,        // Account to send transactions from (default: accounts[0])
@@ -135,5 +140,5 @@ module.exports = {
     etherscan: etherscanApiKey,
     bscscan: bscApiKey,
     polygonscan: polygonApiKey
-  }
+  },
 };

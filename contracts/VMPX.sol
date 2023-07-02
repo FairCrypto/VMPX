@@ -10,12 +10,23 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
 
     uint256 public constant BATCH = 200 ether;
     uint256 public immutable cycles; // depends on a network block side, set in constructor
+    uint256 public immutable startBlockNumber;
 
     uint256 public counter;
     mapping(uint256 => bool) private _work;
 
-    constructor(uint256 cycles_) {
+    /**
+        @dev    Start of Operations Guard
+    */
+    modifier notBeforeStart() {
+        require(block.number > startBlockNumber, "mint not active yet");
+        _;
+    }
+
+
+    constructor(uint256 cycles_, uint256 startBlockNumber_) {
         require(cycles_ > 0, 'bad limit');
+        startBlockNumber = startBlockNumber_;
         cycles = cycles_;
     }
 
@@ -29,7 +40,7 @@ contract VMPX is ERC20("VMPX", "VMPX"), ERC20Capped(108_624_000 ether) {
         super._mint(account, amount);
     }
 
-    function mint(uint256 power) external {
+    function mint(uint256 power) external notBeforeStart {
         require(power > 0 && power < 196, 'power out of bounds');
         require(tx.origin == msg.sender, 'only EOAs allowed');
         require(totalSupply() + (BATCH * power) <= cap(), "minting would exceed cap");
